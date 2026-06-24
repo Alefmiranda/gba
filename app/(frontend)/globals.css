@@ -1,0 +1,351 @@
+@import "tailwindcss";
+
+@theme {
+  /* paleta da marca */
+  --color-brand: #053A44;
+  --color-brand-deep: #032930;
+  --color-brand-accent: #77CDDE;
+  --color-brand-accent-soft: #e6f5f8;
+
+  /* neutros */
+  --color-canvas: #f5f2ec;
+  --color-paper: #ebe7df;
+  --color-surface: #ffffff;
+  --color-ink: #0e0e0c;
+  --color-ink-soft: #56544e;
+
+  /* tipografia — Archivo (variable, c/ width) + Geist Mono */
+  --font-sans: var(--font-archivo), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html, body {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-stretch: 100%;
+  letter-spacing: -0.005em;
+  line-height: 1.5;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-brand-accent);
+  color: var(--color-ink);
+}
+
+/* === utilitárias === */
+
+/* compatibilidade: serif vira Manrope sem cair em fallback Times */
+.serif {
+  font-family: var(--font-sans);
+  font-weight: 400;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-feature-settings: "zero", "tnum";
+}
+
+/* Display headline — Archivo bold, largura normal, GIGANTE (pegada Nike/Neue Haas) */
+.display {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-stretch: 100%;
+  letter-spacing: -0.035em;
+  line-height: 0.96;
+}
+
+/* Destaque editorial — Archivo italic bold */
+.italic-display {
+  font-family: var(--font-sans);
+  font-style: italic;
+  font-weight: 700;
+  font-stretch: 100%;
+  letter-spacing: -0.03em;
+  line-height: 0.96;
+}
+
+/* Marker mono — pra timecodes, paces, coordenadas */
+.marker {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-feature-settings: "zero", "tnum";
+}
+
+.rule-thin {
+  background-image: linear-gradient(to right, currentColor 50%, transparent 50%);
+  background-size: 4px 1px;
+  background-repeat: repeat-x;
+  background-position: 0 50%;
+}
+
+/* === Lenis (scroll suave) === */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+@keyframes marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+.marquee-track {
+  animation: marquee 38s linear infinite;
+  will-change: transform;
+}
+
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+.blink {
+  animation: blink 1.1s steps(1, end) infinite;
+}
+
+/* Ken Burns: zoom cinematográfico lento e infinito */
+@keyframes kenburns {
+  0%   { transform: scale(1)    translate(0%, 0%); }
+  50%  { transform: scale(1.08) translate(-1.5%, -1%); }
+  100% { transform: scale(1)    translate(0%, 0%); }
+}
+.kenburns {
+  animation: kenburns 22s ease-in-out infinite;
+  transform-origin: center;
+  will-change: transform;
+}
+
+/* brilho deslizante (sheen) nas barras de comparação */
+@keyframes bar-sheen {
+  0%        { transform: translateX(-130%); }
+  55%, 100% { transform: translateX(130%); }
+}
+.bar-sheen {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.6),
+    transparent
+  );
+  animation: bar-sheen 2.8s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* troca suave do mini-depoimento no card da Hero */
+@keyframes hero-quote-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero-quote-in {
+  animation: hero-quote-in 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* brilho girando na borda do card do hero (minimalista) */
+@keyframes hero-glow-spin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(360deg); }
+}
+.hero-glow-spin {
+  animation: hero-glow-spin 5s linear infinite;
+  will-change: transform;
+}
+
+/* highlighter pra palavra destacada */
+@keyframes highlight-in {
+  0%   { transform: scaleX(0); }
+  100% { transform: scaleX(1); }
+}
+.hi-highlight {
+  position: relative;
+  display: inline-block;
+}
+.hi-highlight::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.08em;
+  height: 0.14em;
+  background: var(--color-brand-accent);
+  transform-origin: left center;
+  transform: scaleX(0);
+  animation: highlight-in 0.9s 1.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  border-radius: 2px;
+  opacity: 0.5;
+}
+
+/* marca-texto cheio na palavra destacada (bloco ciano + texto escuro, levemente torto) */
+.hi-marker {
+  position: relative;
+  display: inline-block;
+  isolation: isolate;
+  color: var(--color-ink);
+  padding: 0 0.16em;
+}
+.hi-marker::before {
+  content: '';
+  position: absolute;
+  inset: 0.08em -0.01em 0.06em;
+  z-index: -1;
+  background: var(--color-brand-accent);
+  border-radius: 0.16em 0.22em 0.18em 0.2em;
+  transform: rotate(-1.4deg);
+}
+
+.grain::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.6' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* === primitives tech === */
+
+/* grid de pontos sutil — pra fundos */
+.tech-dots {
+  background-image: radial-gradient(circle, currentColor 0.5px, transparent 0.5px);
+  background-size: 18px 18px;
+  background-position: 0 0;
+}
+
+/* grid de linhas — pra cards técnicos */
+.tech-grid {
+  background-image:
+    linear-gradient(to right, currentColor 1px, transparent 1px),
+    linear-gradient(to bottom, currentColor 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+/* glow sutil — pra cards destacados */
+.tech-glow {
+  box-shadow:
+    inset 0 1px 0 rgba(119, 205, 222, 0.08),
+    0 0 0 1px rgba(119, 205, 222, 0.06),
+    0 20px 60px -30px rgba(119, 205, 222, 0.18);
+}
+
+/* dot pulsante (status indicator) */
+@keyframes tech-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%      { transform: scale(1.6); opacity: 0.3; }
+}
+.tech-pulse {
+  animation: tech-pulse 2s ease-in-out infinite;
+}
+
+/* ring escalando (radar) */
+@keyframes tech-ring {
+  0%   { transform: scale(0.4); opacity: 0.6; }
+  100% { transform: scale(2.2); opacity: 0;   }
+}
+.tech-ring {
+  animation: tech-ring 3s ease-out infinite;
+}
+.tech-ring:nth-child(2) { animation-delay: 1s; }
+.tech-ring:nth-child(3) { animation-delay: 2s; }
+
+/* sweep de linha (scan) */
+@keyframes tech-scan {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+.tech-scan {
+  animation: tech-scan 4s linear infinite;
+}
+
+/* === preloader === */
+/* logo na cor original — fade + scale */
+@keyframes preloader-logo-in {
+  0%   { opacity: 0; transform: scale(0.9); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.preloader-logo {
+  animation: preloader-logo-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
+}
+
+/* flash ciano — dá o "pop" */
+@keyframes preloader-flash {
+  0%, 42% { opacity: 0; }
+  56%     { opacity: 0.55; }
+  100%    { opacity: 0; }
+}
+.preloader-flash {
+  animation: preloader-flash 1.1s ease-out forwards;
+}
+
+/* brilho varrendo a logo */
+@keyframes preloader-sweep {
+  0%, 30% { transform: translateX(-160%); }
+  100%    { transform: translateX(160%); }
+}
+.preloader-sweep {
+  animation: preloader-sweep 1.1s cubic-bezier(0.5, 0, 0.2, 1) forwards;
+}
+
+/* === conteúdo do post (RichText lexical) === */
+.post-content > * + * { margin-top: 1.25em; }
+.post-content h2 {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 1.7em;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-top: 1.8em;
+  color: var(--color-ink);
+}
+.post-content h3 {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 1.3em;
+  line-height: 1.2;
+  margin-top: 1.5em;
+  color: var(--color-ink);
+}
+.post-content a {
+  color: var(--color-brand);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.post-content strong { font-weight: 700; color: var(--color-ink); }
+.post-content ul,
+.post-content ol { padding-left: 1.3em; }
+.post-content ul { list-style: disc; }
+.post-content ol { list-style: decimal; }
+.post-content li { margin-top: 0.4em; }
+.post-content blockquote {
+  border-left: 2px solid var(--color-brand-accent);
+  padding-left: 1.2em;
+  font-style: italic;
+  color: var(--color-ink-soft);
+}
+.post-content img { border-radius: 0.75rem; }
+
+/* scrollbar invisível pro carrossel stories */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

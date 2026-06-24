@@ -39,3 +39,25 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# arquivos pesados — ficam no Supabase Storage, fora do repo
+/media
+/public/photos
+/public/videos
+/Fotos e videos
+
+# banco local (produção usa Postgres/Supabase)
+payload.db
+*.db
+*.db-shm
+*.db-wal
+
+# zips de deploy / backups / credenciais
+*.zip
+*.bak
+/.staycloud
+
+# scripts de migração (uso único, contêm credenciais — fora do repo)
+/scripts/export-data.ts
+/scripts/rest-export.mjs
+/scripts/rest-import.mjs
