@@ -299,7 +299,7 @@ export function Problema() {
             className="group relative lg:col-span-6 rounded-[22px] overflow-hidden border border-white/10 h-[380px] lg:h-[460px]"
           >
             <Image
-              src="/hero-equipe.jpg"
+              src="/photos/foto-05.jpg"
               alt="Corredor treinando sozinho na rua"
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"
