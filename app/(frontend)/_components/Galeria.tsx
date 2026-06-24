@@ -96,7 +96,7 @@ export function Galeria({ fotosCms }: { fotosCms?: string[] }) {
               key={src}
               onClick={() => setLightbox(i)}
               aria-label={`Abrir foto ${i + 1}`}
-              className="group relative block w-full mb-3 lg:mb-4 break-inside-avoid overflow-hidden bg-ink rounded-md cursor-zoom-in [content-visibility:auto] [contain-intrinsic-size:auto_420px]"
+              className="group relative block w-full mb-3 lg:mb-4 break-inside-avoid overflow-hidden bg-ink rounded-md cursor-zoom-in"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
