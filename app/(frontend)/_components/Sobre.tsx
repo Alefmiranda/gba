@@ -31,7 +31,7 @@ export function Sobre() {
             <div ref={photoRef} className="relative h-[420px] lg:h-full min-h-[480px] rounded-2xl overflow-hidden bg-ink">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <motion.img
-                src="/photos/foto-20.jpg"
+                src="/hero-equipe-casa41.jpg"
                 alt="Guilherme Borges em prova"
                 style={{ y: photoY }}
                 className="absolute inset-x-0 -top-[10%] w-full h-[120%] object-cover object-[50%_25%]"
