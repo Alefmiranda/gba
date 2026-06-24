@@ -8,20 +8,33 @@ async function getDb() {
   return getPayload({ config })
 }
 
+const BUCKET = process.env.S3_BUCKET || 'media'
+// base público do Supabase Storage (CDN — rápido e cacheado), derivado do endpoint S3.
+const _ref = (process.env.S3_ENDPOINT || '').match(/https?:\/\/([^.]+)\.storage\.supabase\.co/)?.[1]
+const PUBLIC_MEDIA_BASE = _ref
+  ? `https://${_ref}.supabase.co/storage/v1/object/public/${BUCKET}`
+  : ''
+
 type MediaDoc = {
   url?: string | null
-  sizes?: Record<string, { url?: string | null } | undefined>
+  filename?: string | null
+  sizes?: Record<string, { url?: string | null; filename?: string | null } | undefined>
 }
 
 function mediaUrl(m: unknown, size?: string): string | null {
   if (!m || typeof m !== 'object') return null
   const doc = m as MediaDoc
+  // nome do arquivo (variante redimensionada quando pedida)
+  let filename: string | null = null
+  if (size && doc.sizes?.[size]?.filename) filename = doc.sizes[size]!.filename ?? null
+  if (!filename) filename = doc.filename ?? null
+  // serve DIRETO do CDN público do Supabase — sem passar pelo proxy serverless (muito mais rápido)
+  if (filename && PUBLIC_MEDIA_BASE) return `${PUBLIC_MEDIA_BASE}/${encodeURIComponent(filename)}`
+  // fallback: url do proxy do Payload
   let u: string | null = null
   if (size && doc.sizes?.[size]?.url) u = doc.sizes[size]!.url ?? null
   if (!u) u = doc.url ?? null
-  if (!u) return null
-  // mantém relativo (same-origin) — funciona no next/image e em qualquer ambiente
-  return u
+  return u ?? null
 }
 
 export type HeroSlide = { id: string; src: string; alt: string }
@@ -79,7 +92,8 @@ export async function getGaleria(): Promise<GaleriaItem[]> {
     })
     return (docs as unknown as Record<string, unknown>[])
       .map((d) => {
-        const src = mediaUrl(d.foto)
+        // thumb leve (card ~168KB) pra grade; a lightbox amplia pro full
+        const src = mediaUrl(d.foto, 'card')
         if (!src) return null
         return { id: String(d.id), src, alt: (d.titulo as string) ?? 'Foto' }
       })

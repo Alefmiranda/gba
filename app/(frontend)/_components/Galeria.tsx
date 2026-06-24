@@ -249,7 +249,7 @@ export function Galeria({ fotosCms }: { fotosCms?: string[] }) {
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={fotos[lightbox ?? 0]}
+                src={(fotos[lightbox ?? 0] ?? '').replace(/-\d+x\d+(\.\w+)(\?|$)/, '$1$2')}
                 alt={`Foto ${(lightbox ?? 0) + 1}`}
                 className="max-w-[90vw] max-h-[85vh] object-contain rounded-md shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)]"
               />

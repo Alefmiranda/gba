@@ -306,7 +306,7 @@ export function Depoimentos() {
           <div
             ref={scrollerRef}
             data-lenis-prevent
-            className="flex gap-4 lg:gap-5 overflow-x-auto overscroll-x-contain snap-x snap-mandatory pb-2 px-6 lg:px-10 scrollbar-hide [touch-action:pan-x]"
+            className="flex gap-4 lg:gap-5 overflow-x-auto overscroll-x-contain snap-x snap-mandatory pb-2 px-6 lg:px-10 scrollbar-hide"
           >
             {depoimentos.map((d, i) => (
               <motion.div
