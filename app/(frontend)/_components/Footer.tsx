@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { INSTAGRAM_URL, STRAVA_URL, whatsappLink, WHATSAPP_MSG_GERAL } from '../_lib/contato'
 
 const nav = [
   { label: 'Início', href: '/' },
@@ -10,8 +11,8 @@ const nav = [
 ]
 
 const social = [
-  { label: 'Instagram', href: '#' },
-  { label: 'Strava', href: '#' },
+  { label: 'Instagram', href: INSTAGRAM_URL },
+  { label: 'Strava', href: STRAVA_URL },
 ]
 
 export function Footer() {
@@ -59,7 +60,9 @@ export function Footer() {
           <div className="col-span-12 lg:col-span-5 lg:pl-8 flex flex-col justify-end gap-3">
             <span className="marker text-ink/45 text-[10px]">Fale direto</span>
             <a
-              href="#contato"
+              href={whatsappLink(WHATSAPP_MSG_GERAL)}
+              target="_blank"
+              rel="noopener noreferrer"
               className="group inline-flex items-center justify-between border-b border-ink/15 pb-3 text-ink hover:text-brand transition"
             >
               <span className="display text-[20px] lg:text-[24px]">WhatsApp</span>
@@ -100,6 +103,8 @@ export function Footer() {
                 <li key={s.label}>
                   <a
                     href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="display text-ink/75 text-[17px] lg:text-[18px] hover:text-brand transition"
                   >
                     {s.label}

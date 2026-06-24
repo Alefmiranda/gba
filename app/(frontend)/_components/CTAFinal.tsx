@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { motion, useScroll, useTransform } from 'motion/react'
 import { useRef } from 'react'
 import { Button } from './Button'
+import { whatsappLink, WHATSAPP_MSG_GERAL } from '../_lib/contato'
 
 const ease = [0.22, 1, 0.36, 1] as const
 
@@ -115,7 +116,15 @@ export function CTAFinal() {
               transition={{ duration: 0.8, delay: 0.26, ease }}
               className="mt-12 flex flex-wrap items-center justify-center gap-5"
             >
-              <Button href="#" variant="primary-light" size="lg">Falar com o Guilherme</Button>
+              <Button
+                href={whatsappLink(WHATSAPP_MSG_GERAL)}
+                target="_blank"
+                rel="noopener noreferrer"
+                variant="primary-light"
+                size="lg"
+              >
+                Falar com o Guilherme
+              </Button>
               <Button href="#planos" variant="link" className="text-canvas">Ver planos</Button>
             </motion.div>
           </div>

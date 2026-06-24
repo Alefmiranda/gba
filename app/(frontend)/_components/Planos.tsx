@@ -3,6 +3,7 @@
 import { motion } from 'motion/react'
 import { Button } from './Button'
 import { SectionLabel } from './SectionLabel'
+import { whatsappLink, whatsappMsgPlano } from '../_lib/contato'
 
 const ease = [0.22, 1, 0.36, 1] as const
 
@@ -252,7 +253,9 @@ export function Planos({ planosCms }: { planosCms?: PlanoCms[] }) {
 
                 <div className="mt-6">
                   <Button
-                    href="#contato"
+                    href={whatsappLink(whatsappMsgPlano(p.nome, `${reais},${centavos}`))}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     variant={isDestaque ? 'primary-light' : 'primary-dark'}
                   >
                     Começar {p.nome.toLowerCase()}
