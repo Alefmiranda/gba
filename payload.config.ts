@@ -5,7 +5,7 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
-import sharp from 'sharp'
+import { createRequire } from 'module'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
@@ -21,6 +21,21 @@ import { Settings } from './globals/Settings'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+
+// sharp é opcional: se a libvips nativa não carregar no runtime (ex.: container
+// distroless), seguimos sem ele. O Payload inicializa normalmente — admin, API,
+// blog e imagens já geradas funcionam; só o resize de novos uploads fica de fora.
+const requireCjs = createRequire(import.meta.url)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let sharp: any = undefined
+try {
+  sharp = requireCjs('sharp')
+} catch (err) {
+  console.warn(
+    '[payload] sharp indisponível, seguindo sem processamento de imagem:',
+    (err as Error)?.message,
+  )
+}
 
 // === banco: Postgres em produção (DATABASE_URI postgres://…), SQLite no dev local ===
 const dbUri = process.env.DATABASE_URI || 'file:./payload.db'
