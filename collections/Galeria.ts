@@ -8,7 +8,7 @@ export const Galeria: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'titulo',
-    defaultColumns: ['titulo', 'categoria', 'ordem'],
+    defaultColumns: ['foto', 'titulo', 'categoria', 'ordem'],
     group: 'Conteúdo',
   },
   access: {
