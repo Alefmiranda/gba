@@ -80,8 +80,11 @@ export function Sobre() {
               <p className="text-ink/80 text-[17px] lg:text-[18px] font-normal leading-[1.6]">
                 Entrei na corrida com um objetivo claro: chegar ao alto nível. No caminho, vieram
                 os resultados, a experiência e, junto com isso, as pessoas querendo entender como eu
-                treinava. A assessoria nasceu de forma natural, da pista, das ruas, das provas e da
-                vivência diária no esporte.
+                treinava.
+              </p>
+              <p className="mt-5 text-ink/80 text-[17px] lg:text-[18px] font-normal leading-[1.6]">
+                A assessoria nasceu de forma natural, da pista, das ruas, das provas e da vivência
+                diária no esporte.
               </p>
               <p className="mt-5 text-ink/60 text-[16px] lg:text-[17px] font-normal leading-[1.6]">
                 Hoje é um trabalho que cresce porque o resultado fala mais alto que a propaganda.
