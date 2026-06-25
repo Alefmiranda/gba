@@ -30,6 +30,10 @@ export const Videos: CollectionConfig = {
       admin: {
         description:
           'Cole o link do YouTube (ex.: https://youtube.com/shorts/XXXXXXXXXXX). A capa é puxada automaticamente do YouTube.',
+        components: {
+          // na LISTA: mostra a capa do vídeo; clicar toca o vídeo
+          Cell: '/components/admin/VideoPreviewCell',
+        },
       },
     },
     {
