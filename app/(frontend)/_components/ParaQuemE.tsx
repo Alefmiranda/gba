@@ -72,7 +72,7 @@ export function ParaQuemE() {
                 <motion.span
                   key={wi}
                   variants={{
-                    hidden: { opacity: 0, y: '100%' },
+                    hidden: { opacity: 0, y: '0.45em' },
                     show: {
                       opacity: 1,
                       y: 0,
@@ -83,47 +83,32 @@ export function ParaQuemE() {
                       },
                     },
                   }}
-                  className="inline-block mr-[0.25em] overflow-hidden align-bottom pb-[0.2em] -mb-[0.2em]"
+                  className={`inline-block mr-[0.25em] ${
+                    token.italic
+                      ? 'italic-display text-brand-accent relative'
+                      : ''
+                  }`}
+                  style={token.italic ? { fontStyle: 'italic' } : undefined}
                 >
-                  <motion.span
-                    variants={{
-                      hidden: { y: '100%' },
-                      show: {
-                        y: 0,
-                        transition: {
-                          duration: 0.8,
-                          delay: ti * 0.4 + wi * 0.06,
-                          ease,
-                        },
-                      },
-                    }}
-                    className={`inline-block ${
-                      token.italic
-                        ? 'italic-display text-brand-accent relative'
-                        : ''
-                    }`}
-                    style={token.italic ? { fontStyle: 'italic' } : undefined}
-                  >
-                    {word}
-                    {/* underline desenhando após a palavra italic */}
-                    {token.italic && wi === token.text.split(' ').length - 1 && (
-                      <motion.span
-                        aria-hidden
-                        variants={{
-                          hidden: { scaleX: 0 },
-                          show: {
-                            scaleX: 1,
-                            transition: {
-                              duration: 0.9,
-                              delay: 1.4,
-                              ease,
-                            },
+                  {word}
+                  {/* underline desenhando após a palavra italic */}
+                  {token.italic && wi === token.text.split(' ').length - 1 && (
+                    <motion.span
+                      aria-hidden
+                      variants={{
+                        hidden: { scaleX: 0 },
+                        show: {
+                          scaleX: 1,
+                          transition: {
+                            duration: 0.9,
+                            delay: 1.4,
+                            ease,
                           },
-                        }}
-                        className="absolute left-0 right-0 -bottom-1 h-[3px] bg-brand-accent/60 origin-left"
-                      />
-                    )}
-                  </motion.span>
+                        },
+                      }}
+                      className="absolute left-0 right-0 -bottom-1 h-[3px] bg-brand-accent/60 origin-left"
+                    />
+                  )}
                 </motion.span>
               ))}
             </span>
