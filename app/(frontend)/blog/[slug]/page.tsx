@@ -10,10 +10,18 @@ import { getPostBySlug } from '../../_lib/content'
 
 export const revalidate = 15
 
+const BUCKET = process.env.S3_BUCKET || 'media'
+const _ref = (process.env.S3_ENDPOINT || '').match(/https?:\/\/([^.]+)\.storage\.supabase\.co/)?.[1]
+const PUBLIC_MEDIA_BASE = _ref
+  ? `https://${_ref}.supabase.co/storage/v1/object/public/${BUCKET}`
+  : ''
+
 function mediaUrl(m: unknown): string | null {
   if (!m || typeof m !== 'object') return null
-  const u = (m as { url?: string | null }).url
-  return u ?? null
+  const doc = m as { url?: string | null; filename?: string | null }
+  // serve direto do CDN público do Supabase (rápido + cacheado)
+  if (doc.filename && PUBLIC_MEDIA_BASE) return `${PUBLIC_MEDIA_BASE}/${encodeURIComponent(doc.filename)}`
+  return doc.url ?? null
 }
 
 export default async function PostPage({
@@ -72,7 +80,7 @@ export default async function PostPage({
 
         {/* capa */}
         {capa ? (
-          <div className="mt-10 relative aspect-[16/9] rounded-2xl overflow-hidden bg-ink">
+          <div className="mt-10 relative aspect-[4/3] rounded-2xl overflow-hidden bg-ink">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={capa} alt={String(post.titulo ?? '')} className="absolute inset-0 w-full h-full object-cover" />
           </div>
