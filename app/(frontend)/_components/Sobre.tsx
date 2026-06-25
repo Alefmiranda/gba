@@ -34,7 +34,7 @@ export function Sobre() {
                 src="/photos/foto-20.jpg"
                 alt="Guilherme Borges em prova"
                 style={{ y: photoY }}
-                className="absolute inset-x-0 -top-[10%] w-full h-[120%] object-cover object-[50%_25%]"
+                className="absolute inset-x-0 -top-[10%] w-full h-[120%] object-cover object-[50%_12%]"
               />
               {/* legenda dentro, canto inferior — discreta */}
               <div className="absolute inset-x-0 bottom-0 p-4 lg:p-5 bg-gradient-to-t from-ink/70 to-transparent">
