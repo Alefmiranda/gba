@@ -24,10 +24,6 @@ const faqs = [
     q: 'Em quanto tempo vejo resultado?',
     a: 'Os primeiros sinais (disposição, ritmo, recuperação) aparecem em semanas. Resultado de prova depende do ciclo. Por isso o trimestral e o semestral entregam mais.',
   },
-  {
-    q: 'Posso cancelar a qualquer momento?',
-    a: 'Pode. Você fica porque está evoluindo, não porque está preso.',
-  },
 ]
 
 export function FAQ() {

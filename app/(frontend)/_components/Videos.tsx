@@ -227,7 +227,7 @@ export function Videos({ videosCms }: { videosCms?: Video[] }) {
             </em>
           </h2>
           <p className="col-span-12 lg:col-span-4 text-ink/75 text-[18px] lg:text-[20px] font-normal leading-[1.4] lg:pb-2">
-            Treinos, bastidor e a equipe nas provas que importam. Passe o mouse pra ver, clique pra ouvir.
+            Treinos, bastidores e a equipe nas provas que importam. Passe o mouse pra ver, clique pra ouvir.
           </p>
         </div>
 

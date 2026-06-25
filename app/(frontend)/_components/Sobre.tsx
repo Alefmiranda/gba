@@ -78,17 +78,21 @@ export function Sobre() {
               className="mt-8 lg:mt-10 max-w-xl"
             >
               <p className="text-ink/80 text-[17px] lg:text-[18px] font-normal leading-[1.6]">
-                Entrei na corrida com um objetivo claro: chegar ao alto nível. No caminho, fui
-                colhendo resultados, experiência e, junto com isso, gente perguntando como eu
-                treinava. A assessoria nasceu daí. Espontânea, da rua, da pista, das provas.
+                Entrei na corrida com um objetivo claro: chegar ao alto nível. No caminho, vieram
+                os resultados, a experiência e, junto com isso, as pessoas querendo entender como eu
+                treinava. A assessoria nasceu de forma natural, da pista, das ruas, das provas e da
+                vivência diária no esporte.
               </p>
               <p className="mt-5 text-ink/60 text-[16px] lg:text-[17px] font-normal leading-[1.6]">
                 Hoje é um trabalho que cresce porque o resultado fala mais alto que a propaganda.
-                Cada atleta tem um plano. Cada plano tem um propósito. E todo mundo aqui está em
-                evolução constante.{' '}
+                Cada atleta tem um planejamento individual. Cada treino tem um propósito. E todo
+                mundo aqui está em evolução constante.{' '}
                 <em className="italic-display text-brand" style={{ fontStyle: 'italic' }}>
                   Eu inclusive.
                 </em>
+              </p>
+              <p className="mt-5 text-ink/60 text-[16px] lg:text-[17px] font-normal leading-[1.6]">
+                Aqui, eu não ensino corrida de fora. Eu continuo vivendo o esporte todos os dias.
               </p>
             </motion.div>
 

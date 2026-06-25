@@ -20,7 +20,7 @@ const items = [
   {
     n: '03',
     titulo: 'Voltando a treinar',
-    desc: 'Retomar com segurança e sem risco de lesão.',
+    desc: 'Retome os treinos com segurança, consistência e progressão adequada.',
   },
   {
     n: '04',
@@ -31,7 +31,7 @@ const items = [
 
 // headline frases - quebradas em "tokens" pra animar
 const headlineTokens = [
-  { text: 'Pra quem corre, ou quer começar,', italic: false },
+  { text: 'Para quem corre ou quer começar a correr', italic: false },
   { text: 'levando a sério.', italic: true },
 ]
 

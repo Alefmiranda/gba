@@ -72,7 +72,7 @@ const items: Item[] = [
   {
     n: '06',
     titulo: 'Controle de carga',
-    desc: 'Volume calibrado pra evitar lesão.',
+    desc: 'Volume calibrado pra treinar com segurança.',
     icon: 'gauge',
     span: 'lg:col-span-6 lg:row-span-1',
   },

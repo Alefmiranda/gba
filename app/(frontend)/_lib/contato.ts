@@ -10,7 +10,7 @@ export function whatsappLink(mensagem: string): string {
 
 /** Mensagem pra contato geral (CTA principal, footer). */
 export const WHATSAPP_MSG_GERAL =
-  'Olá, Guilherme! Quero saber mais sobre a assessoria de corrida da GBA.'
+  'Olá, Guilherme! Quero saber mais sobre a assessoria de corrida.'
 
 /** Mensagem personalizada por plano. */
 export function whatsappMsgPlano(nome: string, precoFmt: string): string {
