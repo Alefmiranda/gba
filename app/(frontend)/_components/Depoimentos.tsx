@@ -320,17 +320,13 @@ export function Depoimentos({
         <div className="mt-14 lg:mt-16 relative">
           <div
             ref={scrollerRef}
-            className="flex gap-4 lg:gap-5 overflow-x-auto overscroll-x-contain snap-x snap-mandatory pb-2 px-6 lg:px-10 scrollbar-hide"
+            className="flex gap-4 lg:gap-5 overflow-x-auto overscroll-x-contain pb-2 px-6 lg:px-10 scrollbar-hide"
           >
             {depoimentos.map((d, i) => (
-              <motion.div
+              <div
                 key={d.id}
                 data-card
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-80px' }}
-                transition={{ duration: 0.7, delay: i * 0.08, ease }}
-                className="relative flex-none w-[86vw] sm:w-[280px] lg:w-[300px] snap-start sm:snap-center"
+                className="relative flex-none w-[86vw] sm:w-[280px] lg:w-[300px]"
               >
                 <div className="relative aspect-[9/16] rounded-2xl overflow-hidden bg-ink">
                   {playing === d.id ? (
@@ -417,7 +413,7 @@ export function Depoimentos({
                     </button>
                   )}
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
 
