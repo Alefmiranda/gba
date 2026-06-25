@@ -8,7 +8,7 @@ export const Depoimentos: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'nome',
-    defaultColumns: ['nome', 'resultado', 'ordem', 'destaque'],
+    defaultColumns: ['nome', 'foto', 'resultado', 'ordem', 'destaque'],
     group: 'Conteúdo',
   },
   access: {
@@ -24,6 +24,11 @@ export const Depoimentos: CollectionConfig = {
       name: 'foto',
       type: 'upload',
       relationTo: 'media',
+      admin: {
+        components: {
+          Cell: '/components/admin/GaleriaFotoCell',
+        },
+      },
     },
     {
       name: 'citacao',

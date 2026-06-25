@@ -8,7 +8,7 @@ export const HeroSlides: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'titulo',
-    defaultColumns: ['titulo', 'ordem'],
+    defaultColumns: ['titulo', 'foto', 'ordem'],
     group: 'Conteúdo',
     description: 'Fotos do carrossel da primeira dobra (Hero).',
   },
@@ -27,6 +27,11 @@ export const HeroSlides: CollectionConfig = {
       type: 'upload',
       relationTo: 'media',
       required: true,
+      admin: {
+        components: {
+          Cell: '/components/admin/GaleriaFotoCell',
+        },
+      },
     },
     {
       name: 'ordem',
