@@ -1,6 +1,7 @@
 import { sqliteAdapter } from '@payloadcms/db-sqlite'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { s3Storage } from '@payloadcms/storage-s3'
+import { resendAdapter } from '@payloadcms/email-resend'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
 import { buildConfig } from 'payload'
@@ -63,6 +64,22 @@ const storagePlugins = process.env.S3_BUCKET
   : []
 
 export default buildConfig({
+  // URL pública do admin — o link do e-mail de redefinição de senha aponta pra cá.
+  // Em produção usa a URL do Vercel; no local cai no default (localhost:3000).
+  serverURL:
+    process.env.PAYLOAD_PUBLIC_SERVER_URL ||
+    (process.env.VERCEL_PROJECT_PRODUCTION_URL
+      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+      : undefined),
+  // E-mail via Resend — ativa o "Esqueci a senha" assim que RESEND_API_KEY existir.
+  // Sem a chave, segue sem e-mail (não quebra nada).
+  email: process.env.RESEND_API_KEY
+    ? resendAdapter({
+        defaultFromAddress: process.env.EMAIL_FROM || 'onboarding@resend.dev',
+        defaultFromName: 'Guilherme Borges Assessoria',
+        apiKey: process.env.RESEND_API_KEY,
+      })
+    : undefined,
   admin: {
     user: Users.slug,
     theme: 'light',
