@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import { SectionLabel } from './SectionLabel'
 
-const faqs = [
+// fallback usado só se a collection "faq" estiver vazia
+const FALLBACK_FAQS = [
   {
     q: 'Sou iniciante. Vou conseguir acompanhar?',
     a: 'Sim. O plano é montado a partir do seu ponto de partida. Iniciante começa como iniciante, com volume seguro e progressão respeitada.',
@@ -26,7 +27,15 @@ const faqs = [
   },
 ]
 
-export function FAQ() {
+export function FAQ({
+  itemsCms,
+}: {
+  itemsCms?: { pergunta: string; resposta: string }[]
+}) {
+  const faqs =
+    itemsCms && itemsCms.length
+      ? itemsCms.map((i) => ({ q: i.pergunta, a: i.resposta }))
+      : FALLBACK_FAQS
   const [open, setOpen] = useState<number | null>(0)
 
   return (

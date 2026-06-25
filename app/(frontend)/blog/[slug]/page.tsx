@@ -6,7 +6,7 @@ import { Button } from '../../_components/Button'
 import { SiteNav } from '../../_components/SiteNav'
 import { FAQ } from '../../_components/FAQ'
 import { Footer } from '../../_components/Footer'
-import { getPostBySlug } from '../../_lib/content'
+import { getPostBySlug, getFAQ } from '../../_lib/content'
 
 export const revalidate = 15
 
@@ -30,7 +30,7 @@ export default async function PostPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const post = await getPostBySlug(slug)
+  const [post, faq] = await Promise.all([getPostBySlug(slug), getFAQ()])
   if (!post) notFound()
 
   const capa = mediaUrl(post.capa)
@@ -100,7 +100,7 @@ export default async function PostPage({
         </div>
       </article>
 
-      <FAQ />
+      <FAQ itemsCms={faq} />
       </main>
       <Footer />
     </>

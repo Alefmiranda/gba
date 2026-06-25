@@ -15,18 +15,19 @@ import { Blog } from './_components/Blog'
 import { FAQ } from './_components/FAQ'
 import { CTAFinal } from './_components/CTAFinal'
 import { Footer } from './_components/Footer'
-import { getGaleria, getVideos, getPosts, getPlanos, getHeroSlides } from './_lib/content'
+import { getGaleria, getVideos, getPosts, getPlanos, getHeroSlides, getFAQ } from './_lib/content'
 
 // revalida o conteúdo do admin a cada 15s
 export const revalidate = 15
 
 export default async function Home() {
-  const [galeria, videos, posts, planos, heroSlides] = await Promise.all([
+  const [galeria, videos, posts, planos, heroSlides, faq] = await Promise.all([
     getGaleria(),
     getVideos(),
     getPosts(),
     getPlanos(),
     getHeroSlides(),
+    getFAQ(),
   ])
 
   return (
@@ -46,7 +47,7 @@ export default async function Home() {
         <Planos planosCms={planos} />
         <Sobre />
         <Blog postsCms={posts} />
-        <FAQ />
+        <FAQ itemsCms={faq} />
         <CTAFinal />
       </main>
       <Footer />

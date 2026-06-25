@@ -130,6 +130,29 @@ export async function getVideos(): Promise<VideoItem[]> {
   }
 }
 
+export type FAQItem = { pergunta: string; resposta: string }
+
+/** Perguntas frequentes (ordenadas). [] se vazio → frontend usa o fallback fixo. */
+export async function getFAQ(): Promise<FAQItem[]> {
+  try {
+    const db = await getDb()
+    const { docs } = await db.find({
+      collection: 'faq',
+      sort: 'ordem',
+      limit: 100,
+      depth: 0,
+    })
+    return (docs as unknown as Record<string, unknown>[])
+      .map((d) => ({
+        pergunta: String(d.pergunta ?? ''),
+        resposta: String(d.resposta ?? ''),
+      }))
+      .filter((x) => x.pergunta && x.resposta)
+  } catch {
+    return []
+  }
+}
+
 /** Posts publicados (cards). */
 export async function getPosts(): Promise<PostCard[]> {
   try {
