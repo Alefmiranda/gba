@@ -83,7 +83,7 @@ export function ParaQuemE() {
                       },
                     },
                   }}
-                  className="inline-block mr-[0.25em] overflow-hidden align-bottom"
+                  className="inline-block mr-[0.25em] overflow-hidden align-bottom pb-[0.2em] -mb-[0.2em]"
                 >
                   <motion.span
                     variants={{

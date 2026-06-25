@@ -9,9 +9,9 @@ import { SectionLabel } from './SectionLabel'
 const ease = [0.22, 1, 0.36, 1] as const
 
 const depoimentos = [
+  { id: 'lV4yOZOC1m0' }, // Thiago — destaque (primeiro)
   { id: '92InyxyRZxk' },
   { id: '5dXWzraUeGs' },
-  { id: 'lV4yOZOC1m0' },
   { id: 'qf5zK6eZeZE' },
   { id: 'j0kmhfrj2mw' },
 ]
