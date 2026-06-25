@@ -8,7 +8,7 @@ export const Galeria: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'titulo',
-    defaultColumns: ['foto', 'titulo', 'categoria', 'ordem'],
+    defaultColumns: ['titulo', 'foto', 'categoria', 'ordem'],
     group: 'Conteúdo',
   },
   access: {
@@ -28,6 +28,11 @@ export const Galeria: CollectionConfig = {
       type: 'upload',
       relationTo: 'media',
       required: true,
+      admin: {
+        components: {
+          Cell: '/components/admin/GaleriaFotoCell',
+        },
+      },
     },
     {
       name: 'categoria',
