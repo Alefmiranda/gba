@@ -8,7 +8,8 @@ import { SectionLabel } from './SectionLabel'
 
 const ease = [0.22, 1, 0.36, 1] as const
 
-const depoimentos = [
+// fallbacks — usados só se a collection "depoimentos" estiver vazia
+const FALLBACK_VIDEOS = [
   { id: 'lV4yOZOC1m0' }, // Thiago — destaque (primeiro)
   { id: '92InyxyRZxk' },
   { id: '5dXWzraUeGs' },
@@ -16,7 +17,7 @@ const depoimentos = [
   { id: 'j0kmhfrj2mw' },
 ]
 
-const depoimentosTexto = [
+const FALLBACK_TEXTOS = [
   {
     nome: 'Morganna Salazar',
     destaque:
@@ -61,11 +62,17 @@ const depoimentosTexto = [
   },
 ]
 
-function SingleQuote() {
+function SingleQuote({
+  textos,
+  videosCount,
+}: {
+  textos: { nome: string; destaque: string; paragrafos: string[] }[]
+  videosCount: number
+}) {
   const [active, setActive] = useState(0)
   const [open, setOpen] = useState(false)
-  const current = depoimentosTexto[active]
-  const total = depoimentosTexto.length
+  const current = textos[active]
+  const total = textos.length
 
   const go = (dir: 1 | -1) => {
     setActive((i) => (i + dir + total) % total)
@@ -163,7 +170,7 @@ function SingleQuote() {
           <span className="text-ink/25">{String(total).padStart(2, '0')}</span>
         </span>
         <div className="flex gap-2">
-          {depoimentosTexto.map((_, i) => (
+          {textos.map((_, i) => (
             <button
               key={i}
               onClick={() => setActive(i)}
@@ -214,7 +221,7 @@ function SingleQuote() {
               </button>
 
               <div className="marker text-brand-accent text-[10px] mb-3">
-                ✦ Depoimento {String(depoimentos.length + active + 1).padStart(2, '0')}
+                ✦ Depoimento {String(videosCount + active + 1).padStart(2, '0')}
               </div>
               <h3 className="display text-ink text-[24px] lg:text-[28px] leading-tight">
                 {current.nome}
@@ -233,7 +240,15 @@ function SingleQuote() {
   )
 }
 
-export function Depoimentos() {
+export function Depoimentos({
+  videosCms,
+  textosCms,
+}: {
+  videosCms?: { id: string }[]
+  textosCms?: { nome: string; destaque: string; paragrafos: string[] }[]
+} = {}) {
+  const depoimentos = videosCms && videosCms.length ? videosCms : FALLBACK_VIDEOS
+  const textos = textosCms && textosCms.length ? textosCms : FALLBACK_TEXTOS
   const [playing, setPlaying] = useState<string | null>(null)
   const scrollerRef = useRef<HTMLDivElement>(null)
 
@@ -411,7 +426,7 @@ export function Depoimentos() {
 
         {/* === DEPOIMENTOS EM TEXTO — single rotator minimal === */}
         <div className="px-6 lg:px-10 mt-10 lg:mt-12">
-          <SingleQuote />
+          <SingleQuote textos={textos} videosCount={depoimentos.length} />
         </div>
 
         <div className="px-6 lg:px-10 mt-12 flex justify-center">

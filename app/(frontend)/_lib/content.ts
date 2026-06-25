@@ -153,6 +153,59 @@ export async function getFAQ(): Promise<FAQItem[]> {
   }
 }
 
+export type DepoimentoVideo = { id: string }
+export type DepoimentoTexto = { nome: string; destaque: string; paragrafos: string[] }
+export type DepoimentosData = { videos: DepoimentoVideo[]; textos: DepoimentoTexto[] }
+
+function ytId(url: string): string | null {
+  const m = String(url).match(
+    /(?:youtube\.com\/(?:shorts\/|watch\?v=|embed\/|live\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/,
+  )
+  return m ? m[1] : null
+}
+
+/** Depoimentos (vídeo + texto). { videos:[], textos:[] } se vazio → fallback fixo. */
+export async function getDepoimentos(): Promise<DepoimentosData> {
+  try {
+    const db = await getDb()
+    const { docs } = await db.find({
+      collection: 'depoimentos',
+      limit: 100,
+      depth: 0,
+      sort: 'ordem',
+    })
+    const rows = docs as unknown as Record<string, unknown>[]
+    const videos = rows
+      .filter((d) => d.tipo === 'video')
+      .sort(
+        (a, b) =>
+          (b.destaque ? 1 : 0) - (a.destaque ? 1 : 0) ||
+          (Number(a.ordem) || 0) - (Number(b.ordem) || 0),
+      )
+      .map((d) => {
+        const id = ytId(String(d.videoUrl || ''))
+        return id ? { id } : null
+      })
+      .filter((x): x is DepoimentoVideo => x !== null)
+    const textos = rows
+      .filter((d) => d.tipo === 'texto')
+      .sort((a, b) => (Number(a.ordem) || 0) - (Number(b.ordem) || 0))
+      .map((d) => ({
+        nome: String(d.nome || ''),
+        destaque: String(d.citacao || ''),
+        paragrafos: Array.isArray(d.paragrafos)
+          ? (d.paragrafos as Record<string, unknown>[])
+              .map((p) => String(p.texto || ''))
+              .filter(Boolean)
+          : [],
+      }))
+      .filter((t) => t.nome && t.destaque)
+    return { videos, textos }
+  } catch {
+    return { videos: [], textos: [] }
+  }
+}
+
 /** Posts publicados (cards). */
 export async function getPosts(): Promise<PostCard[]> {
   try {
