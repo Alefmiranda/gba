@@ -18,6 +18,7 @@ import { HeroSlides } from './collections/HeroSlides'
 import { Planos } from './collections/Planos'
 import { Conquistas } from './collections/Conquistas'
 import { FAQ } from './collections/FAQ'
+import { PedidosCamiseta } from './collections/PedidosCamiseta'
 import { Settings } from './globals/Settings'
 
 const filename = fileURLToPath(import.meta.url)
@@ -107,6 +108,7 @@ export default buildConfig({
     Planos,
     Conquistas,
     FAQ,
+    PedidosCamiseta,
   ],
   globals: [Settings],
   editor: lexicalEditor(),
