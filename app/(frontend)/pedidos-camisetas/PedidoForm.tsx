@@ -39,6 +39,7 @@ export function PedidoForm({ loteId }: { loteId: string }) {
   const [whatsapp, setWhatsapp] = useState('')
   const [observacao, setObservacao] = useState('')
   const [status, setStatus] = useState<'idle' | 'sending' | 'ok' | 'err'>('idle')
+  const [errDetail, setErrDetail] = useState('')
 
   const modelo = MODELOS.find((m) => m.value === modeloVal)
   const temMedidas = modelo?.medidas.some((m) => m[1]) ?? false
@@ -90,6 +91,7 @@ export function PedidoForm({ loteId }: { loteId: string }) {
       setStatus('ok')
     } catch (err) {
       console.error('Falha ao enviar pedido:', err)
+      setErrDetail(String((err as Error)?.message || err))
       setStatus('err')
     }
   }
@@ -273,7 +275,12 @@ export function PedidoForm({ loteId }: { loteId: string }) {
         <textarea className={`${inputClass} min-h-[80px] resize-y`} value={observacao} onChange={(e) => setObservacao(e.target.value)} placeholder="Algum detalhe?" />
       </div>
 
-      {status === 'err' && <p className="text-[14px] text-red-600">Não consegui enviar. Confere os campos e tenta de novo.</p>}
+      {status === 'err' && (
+        <div className="text-[14px] text-red-600">
+          <p>Não consegui enviar. Confere os campos e tenta de novo.</p>
+          {errDetail && <p className="mt-1 text-[11px] text-red-500/80 break-all">detalhe: {errDetail}</p>}
+        </div>
+      )}
 
       <button
         type="submit"
