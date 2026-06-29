@@ -72,7 +72,24 @@ export const PedidosCamiseta: CollectionConfig = {
       type: 'relationship',
       relationTo: 'lotes',
       label: 'Lote',
-      admin: { description: 'Rodada de pedidos a que este pertence.' },
+      admin: { description: 'Rodada de pedidos a que este pertence (vinculado automaticamente ao lote ativo).' },
     },
   ],
+  hooks: {
+    // ao criar (pelo formulário público), vincula automaticamente ao lote ativo
+    beforeValidate: [
+      async ({ data, req, operation }) => {
+        if (operation === 'create' && data && data.lote == null) {
+          const { docs } = await req.payload.find({
+            collection: 'lotes',
+            where: { ativo: { equals: true } },
+            limit: 1,
+            depth: 0,
+          })
+          if (docs[0]) data.lote = docs[0].id
+        }
+        return data
+      },
+    ],
+  },
 }

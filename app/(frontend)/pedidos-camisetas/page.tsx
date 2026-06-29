@@ -40,7 +40,7 @@ export default async function PedidosCamisetasPage() {
 
         {lote ? (
           <div className="rounded-2xl border border-ink/10 bg-white/70 backdrop-blur p-6 lg:p-8 shadow-sm">
-            <PedidoForm loteId={lote.id} />
+            <PedidoForm />
           </div>
         ) : (
           <div className="rounded-2xl border border-ink/10 bg-white/70 p-8 text-center">

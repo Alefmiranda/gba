@@ -26,7 +26,7 @@ type Item = { camiseta: string; modelo: string; tamanho: string; quantidade: num
 const inputClass =
   'w-full rounded-xl border border-ink/15 bg-white px-4 py-3 text-[16px] text-ink outline-none transition focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/30'
 
-export function PedidoForm({ loteId }: { loteId: string }) {
+export function PedidoForm() {
   // item em construção
   const [camiseta, setCamiseta] = useState('')
   const [modeloVal, setModeloVal] = useState('')
@@ -39,7 +39,6 @@ export function PedidoForm({ loteId }: { loteId: string }) {
   const [whatsapp, setWhatsapp] = useState('')
   const [observacao, setObservacao] = useState('')
   const [status, setStatus] = useState<'idle' | 'sending' | 'ok' | 'err'>('idle')
-  const [errDetail, setErrDetail] = useState('')
 
   const modelo = MODELOS.find((m) => m.value === modeloVal)
   const temMedidas = modelo?.medidas.some((m) => m[1]) ?? false
@@ -80,18 +79,13 @@ export function PedidoForm({ loteId }: { loteId: string }) {
             nome: nome.trim(),
             whatsapp: whatsapp.trim(),
             observacao: observacao.trim() || undefined,
-            lote: loteId || undefined,
           }),
         })
-        if (!r.ok) {
-          const t = await r.text().catch(() => '')
-          throw new Error(`HTTP ${r.status} ${t.slice(0, 300)}`)
-        }
+        if (!r.ok) throw new Error(`HTTP ${r.status}`)
       }
       setStatus('ok')
     } catch (err) {
       console.error('Falha ao enviar pedido:', err)
-      setErrDetail(String((err as Error)?.message || err))
       setStatus('err')
     }
   }
@@ -278,7 +272,6 @@ export function PedidoForm({ loteId }: { loteId: string }) {
       {status === 'err' && (
         <div className="text-[14px] text-red-600">
           <p>Não consegui enviar. Confere os campos e tenta de novo.</p>
-          {errDetail && <p className="mt-1 text-[11px] text-red-500/80 break-all">detalhe: {errDetail}</p>}
         </div>
       )}
 
