@@ -69,6 +69,7 @@ export function PedidoForm({ loteId }: { loteId: string }) {
       for (const item of lista) {
         const r = await fetch('/api/pedidos-camiseta', {
           method: 'POST',
+          credentials: 'omit', // form público: não enviar cookie de login do admin
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             camiseta: item.camiseta,
@@ -78,13 +79,17 @@ export function PedidoForm({ loteId }: { loteId: string }) {
             nome: nome.trim(),
             whatsapp: whatsapp.trim(),
             observacao: observacao.trim() || undefined,
-            lote: loteId,
+            lote: loteId || undefined,
           }),
         })
-        if (!r.ok) throw new Error('fail')
+        if (!r.ok) {
+          const t = await r.text().catch(() => '')
+          throw new Error(`HTTP ${r.status} ${t.slice(0, 300)}`)
+        }
       }
       setStatus('ok')
-    } catch {
+    } catch (err) {
+      console.error('Falha ao enviar pedido:', err)
       setStatus('err')
     }
   }
