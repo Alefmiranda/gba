@@ -26,7 +26,7 @@ type Item = { camiseta: string; modelo: string; tamanho: string; quantidade: num
 const inputClass =
   'w-full rounded-xl border border-ink/15 bg-white px-4 py-3 text-[16px] text-ink outline-none transition focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/30'
 
-export function PedidoForm() {
+export function PedidoForm({ loteId }: { loteId: string }) {
   // item em construção
   const [camiseta, setCamiseta] = useState('')
   const [modeloVal, setModeloVal] = useState('')
@@ -78,6 +78,7 @@ export function PedidoForm() {
             nome: nome.trim(),
             whatsapp: whatsapp.trim(),
             observacao: observacao.trim() || undefined,
+            lote: loteId,
           }),
         })
         if (!r.ok) throw new Error('fail')

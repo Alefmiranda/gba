@@ -8,7 +8,7 @@ export const PedidosCamiseta: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'nome',
-    defaultColumns: ['nome', 'camiseta', 'modelo', 'tamanho', 'quantidade', 'whatsapp', 'createdAt'],
+    defaultColumns: ['lote', 'nome', 'camiseta', 'modelo', 'tamanho', 'quantidade', 'whatsapp', 'createdAt'],
     group: 'Pedidos',
     description:
       'Pedidos enviados pelos membros pelo formulário público (/pedidos-camisetas). Use o botão "Baixar CSV" pra mandar a lista pro fornecedor.',
@@ -66,6 +66,13 @@ export const PedidosCamiseta: CollectionConfig = {
       name: 'observacao',
       type: 'textarea',
       label: 'Observações',
+    },
+    {
+      name: 'lote',
+      type: 'relationship',
+      relationTo: 'lotes',
+      label: 'Lote',
+      admin: { description: 'Rodada de pedidos a que este pertence.' },
     },
   ],
 }

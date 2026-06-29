@@ -206,6 +206,26 @@ export async function getDepoimentos(): Promise<DepoimentosData> {
   }
 }
 
+export type LoteAtivo = { id: string; nome: string }
+
+/** Lote de pedidos atualmente ativo (recebe pedidos novos). null se nenhum. */
+export async function getLoteAtivo(): Promise<LoteAtivo | null> {
+  try {
+    const db = await getDb()
+    const { docs } = await db.find({
+      collection: 'lotes',
+      where: { ativo: { equals: true } },
+      limit: 1,
+      depth: 0,
+    })
+    const d = docs[0] as Record<string, unknown> | undefined
+    if (!d) return null
+    return { id: String(d.id), nome: String(d.nome || '') }
+  } catch {
+    return null
+  }
+}
+
 /** Posts publicados (cards). */
 export async function getPosts(): Promise<PostCard[]> {
   try {

@@ -19,6 +19,7 @@ import { Planos } from './collections/Planos'
 import { Conquistas } from './collections/Conquistas'
 import { FAQ } from './collections/FAQ'
 import { PedidosCamiseta } from './collections/PedidosCamiseta'
+import { Lotes } from './collections/Lotes'
 import { Settings } from './globals/Settings'
 
 const filename = fileURLToPath(import.meta.url)
@@ -109,6 +110,7 @@ export default buildConfig({
     Conquistas,
     FAQ,
     PedidosCamiseta,
+    Lotes,
   ],
   globals: [Settings],
   editor: lexicalEditor(),
