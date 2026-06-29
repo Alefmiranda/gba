@@ -6,6 +6,7 @@ import React, { useState } from 'react'
 type Pedido = {
   nome?: string
   whatsapp?: string
+  camiseta?: string
   modelo?: string
   tamanho?: string
   quantidade?: number
@@ -36,11 +37,12 @@ export default function ExportPedidosButton() {
         setMsg('Nenhum pedido ainda.')
         return
       }
-      const header = ['Nome', 'WhatsApp', 'Modelo', 'Tamanho', 'Quantidade', 'Observações', 'Data']
+      const header = ['Nome', 'WhatsApp', 'Camiseta', 'Modelo', 'Tamanho', 'Quantidade', 'Observações', 'Data']
       const rows = docs.map((d) =>
         [
           d.nome,
           d.whatsapp,
+          d.camiseta,
           d.modelo,
           d.tamanho,
           d.quantidade,

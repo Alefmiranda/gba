@@ -8,7 +8,7 @@ export const PedidosCamiseta: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'nome',
-    defaultColumns: ['nome', 'modelo', 'tamanho', 'quantidade', 'whatsapp', 'createdAt'],
+    defaultColumns: ['nome', 'camiseta', 'modelo', 'tamanho', 'quantidade', 'whatsapp', 'createdAt'],
     group: 'Pedidos',
     description:
       'Pedidos enviados pelos membros pelo formulário público (/pedidos-camisetas). Use o botão "Baixar CSV" pra mandar a lista pro fornecedor.',
@@ -37,10 +37,16 @@ export const PedidosCamiseta: CollectionConfig = {
       label: 'WhatsApp',
     },
     {
+      name: 'camiseta',
+      type: 'text',
+      required: true,
+      label: 'Camiseta (estampa)',
+    },
+    {
       name: 'modelo',
       type: 'text',
       required: true,
-      label: 'Modelo',
+      label: 'Modelo (corte)',
     },
     {
       name: 'tamanho',

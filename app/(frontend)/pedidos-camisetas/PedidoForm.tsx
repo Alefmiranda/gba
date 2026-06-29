@@ -46,10 +46,17 @@ const MODELOS: Modelo[] = [
   },
 ]
 
+// as 2 estampas (poliamida)
+const CAMISETAS = [
+  { value: 'Modelo 01', sub: 'branca', foto: '/camisetas/modelo-01.jpg' },
+  { value: 'Modelo 02', sub: 'preta', foto: '/camisetas/modelo-02.jpg' },
+]
+
 const inputClass =
   'w-full rounded-xl border border-ink/15 bg-white px-4 py-3 text-[16px] text-ink outline-none transition focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/30'
 
 export function PedidoForm() {
+  const [camiseta, setCamiseta] = useState('')
   const [nome, setNome] = useState('')
   const [whatsapp, setWhatsapp] = useState('')
   const [modeloVal, setModeloVal] = useState('')
@@ -64,13 +71,14 @@ export function PedidoForm() {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!nome.trim() || !whatsapp.trim() || !modeloVal || !tamanho) return
+    if (!camiseta || !nome.trim() || !whatsapp.trim() || !modeloVal || !tamanho) return
     setStatus('sending')
     try {
       const r = await fetch('/api/pedidos-camiseta', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          camiseta,
           nome: nome.trim(),
           whatsapp: whatsapp.trim(),
           modelo: modelo?.label || modeloVal,
@@ -100,7 +108,7 @@ export function PedidoForm() {
         </p>
         <button
           onClick={() => {
-            setNome(''); setWhatsapp(''); setModeloVal(''); setTamanho(''); setQuantidade(1); setObservacao(''); setStatus('idle')
+            setCamiseta(''); setNome(''); setWhatsapp(''); setModeloVal(''); setTamanho(''); setQuantidade(1); setObservacao(''); setStatus('idle')
           }}
           className="mt-8 marker text-brand-accent text-[11px] hover:text-brand transition"
         >
@@ -112,9 +120,35 @@ export function PedidoForm() {
 
   return (
     <form onSubmit={submit} className="space-y-7">
-      {/* MODELO */}
+      {/* CAMISETA (estampa) */}
       <div>
-        <label className="marker text-ink/55 text-[11px] block mb-3">Modelo *</label>
+        <label className="marker text-ink/55 text-[11px] block mb-3">Escolha a camiseta *</label>
+        <div className="grid grid-cols-2 gap-3">
+          {CAMISETAS.map((cam) => {
+            const sel = camiseta === cam.value
+            return (
+              <button
+                key={cam.value}
+                type="button"
+                onClick={() => setCamiseta(cam.value)}
+                className={`rounded-xl border p-2 text-left transition ${
+                  sel ? 'border-brand-accent bg-brand-accent/10 ring-2 ring-brand-accent/30' : 'border-ink/15 bg-white hover:border-ink/30'
+                }`}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={cam.foto} alt={cam.value} className="aspect-[3/4] w-full rounded-lg object-cover bg-ink/5" />
+                <div className="display text-ink text-[15px] leading-tight mt-2">{cam.value}</div>
+                <div className="marker text-ink/40 text-[9px] mt-0.5">{cam.sub} · poliamida</div>
+              </button>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* MODELO (corte) — aparece depois de escolher a camiseta */}
+      {camiseta && (
+      <div>
+        <label className="marker text-ink/55 text-[11px] block mb-3">Modelo (corte) *</label>
         <div className="grid grid-cols-2 gap-2.5">
           {MODELOS.map((m) => {
             const sel = modeloVal === m.value
@@ -134,6 +168,8 @@ export function PedidoForm() {
           })}
         </div>
       </div>
+
+      )}
 
       {/* TAMANHO (depende do modelo) */}
       {modelo && (
@@ -225,7 +261,7 @@ export function PedidoForm() {
 
       <button
         type="submit"
-        disabled={status === 'sending' || !nome.trim() || !whatsapp.trim() || !modeloVal || !tamanho}
+        disabled={status === 'sending' || !camiseta || !nome.trim() || !whatsapp.trim() || !modeloVal || !tamanho}
         className="w-full rounded-full bg-brand py-4 text-canvas text-[15px] font-semibold transition hover:bg-brand/90 disabled:opacity-40 disabled:cursor-not-allowed"
       >
         {status === 'sending' ? 'Enviando…' : 'Enviar pedido'}
