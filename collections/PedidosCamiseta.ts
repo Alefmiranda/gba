@@ -11,7 +11,7 @@ export const PedidosCamiseta: CollectionConfig = {
     defaultColumns: ['lote', 'nome', 'camiseta', 'modelo', 'tamanho', 'quantidade', 'whatsapp', 'createdAt'],
     group: 'Pedidos',
     description:
-      'Pedidos enviados pelos membros pelo formulário público (/pedidos-camisetas). Use o botão "Baixar CSV" pra mandar a lista pro fornecedor.',
+      'Pedidos enviados pelos membros pelo formulário público (/pedidos-camisetas). Use o botão "Baixar PDF" pra mandar a lista pro fornecedor.',
     components: {
       // botão de baixar a lista em CSV no topo da lista
       beforeListTable: ['/components/admin/ExportPedidosButton'],
