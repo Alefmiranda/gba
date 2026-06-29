@@ -38,21 +38,15 @@ export const PedidosCamiseta: CollectionConfig = {
     },
     {
       name: 'modelo',
-      type: 'select',
+      type: 'text',
       required: true,
       label: 'Modelo',
-      options: [
-        { label: 'Tradicional', value: 'tradicional' },
-        { label: 'Baby look', value: 'baby-look' },
-      ],
     },
     {
       name: 'tamanho',
-      type: 'select',
+      type: 'text',
       required: true,
       label: 'Tamanho',
-      // provisório — ajusto quando vierem as fotos com os tamanhos
-      options: ['PP', 'P', 'M', 'G', 'GG', 'XG'].map((s) => ({ label: s, value: s })),
     },
     {
       name: 'quantidade',

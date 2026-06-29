@@ -36,13 +36,12 @@ export default function ExportPedidosButton() {
         setMsg('Nenhum pedido ainda.')
         return
       }
-      const MODELO: Record<string, string> = { tradicional: 'Tradicional', 'baby-look': 'Baby look' }
       const header = ['Nome', 'WhatsApp', 'Modelo', 'Tamanho', 'Quantidade', 'Observações', 'Data']
       const rows = docs.map((d) =>
         [
           d.nome,
           d.whatsapp,
-          MODELO[d.modelo || ''] || d.modelo,
+          d.modelo,
           d.tamanho,
           d.quantidade,
           d.observacao,
