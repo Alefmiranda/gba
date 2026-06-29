@@ -10,6 +10,8 @@ export const Lotes: CollectionConfig = {
     useAsTitle: 'nome',
     defaultColumns: ['nome', 'ativo', 'createdAt'],
     group: 'Pedidos',
+    // gerenciado pelo painel dentro de "Pedidos de camiseta" — oculto do nav/dashboard
+    hidden: true,
     description:
       'Cada lote é uma rodada de pedidos. Marque UM como Ativo — os pedidos novos entram nele. Pra abrir uma nova rodada, crie um lote e marque como ativo (o anterior desativa sozinho). Os pedidos antigos ficam guardados no lote deles.',
   },
