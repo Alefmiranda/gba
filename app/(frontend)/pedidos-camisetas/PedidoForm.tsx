@@ -2,92 +2,86 @@
 
 import { useState } from 'react'
 
-// modelos + tamanhos + medidas (largura × comprimento, cm) — das tabelas Vellox
-type Medida = [string, string, string] // [tamanho, largura, comprimento]
-type Modelo = { value: string; label: string; sub?: string; medidas: Medida[] }
-
-const MODELOS: Modelo[] = [
-  {
-    value: 'tradicional',
-    label: 'Tradicional',
-    sub: 'masculina / unissex',
-    medidas: [
-      ['PP', '48', '66'], ['P', '50,5', '69'], ['M', '53', '71'],
-      ['G', '55,5', '73'], ['GG', '58', '75'], ['EXGG', '61', '78'],
-    ],
-  },
-  {
-    value: 'baby-look',
-    label: 'Baby look',
-    sub: 'feminina',
-    medidas: [['P', '42', '56,9'], ['M', '43,5', '62,5'], ['G', '45,5', '64,5'], ['GG', '48,5', '66,5']],
-  },
-  {
-    value: 'regata-masculina',
-    label: 'Regata masculina',
-    medidas: [['P', '49', '65'], ['M', '52', '70,5'], ['G', '54,5', '74,5'], ['GG', '57', '79']],
-  },
-  {
-    value: 'regata-feminina',
-    label: 'Regata feminina',
-    medidas: [['P', '36,5', '59,5'], ['M', '40', '63'], ['G', '42,5', '65,5'], ['GG', '45,5', '67,5']],
-  },
-  {
-    value: 'tamanho-especial',
-    label: 'Tamanho especial',
-    sub: 'plus size',
-    medidas: [['G1', '63', '80'], ['G2', '66', '82'], ['G3', '68', '88']],
-  },
-  {
-    value: 'infantil',
-    label: 'Infantil',
-    sub: '2 a 14 anos',
-    medidas: [['2 anos', '', ''], ['4 anos', '', ''], ['6 anos', '', ''], ['8 anos', '', ''], ['10 anos', '', ''], ['12 anos', '', ''], ['14 anos', '', '']],
-  },
-]
-
 // as 2 estampas (poliamida)
 const CAMISETAS = [
   { value: 'Modelo 01', sub: 'branca', foto: '/camisetas/modelo-01.jpg' },
   { value: 'Modelo 02', sub: 'preta', foto: '/camisetas/modelo-02.jpg' },
 ]
 
+// modelos (corte) + tamanhos + medidas (largura × comprimento, cm) — tabelas Vellox
+type Medida = [string, string, string]
+type Modelo = { value: string; label: string; sub?: string; medidas: Medida[] }
+
+const MODELOS: Modelo[] = [
+  { value: 'tradicional', label: 'Tradicional', sub: 'masculina / unissex', medidas: [['PP', '48', '66'], ['P', '50,5', '69'], ['M', '53', '71'], ['G', '55,5', '73'], ['GG', '58', '75'], ['EXGG', '61', '78']] },
+  { value: 'baby-look', label: 'Baby look', sub: 'feminina', medidas: [['P', '42', '56,9'], ['M', '43,5', '62,5'], ['G', '45,5', '64,5'], ['GG', '48,5', '66,5']] },
+  { value: 'regata-masculina', label: 'Regata masculina', medidas: [['P', '49', '65'], ['M', '52', '70,5'], ['G', '54,5', '74,5'], ['GG', '57', '79']] },
+  { value: 'regata-feminina', label: 'Regata feminina', medidas: [['P', '36,5', '59,5'], ['M', '40', '63'], ['G', '42,5', '65,5'], ['GG', '45,5', '67,5']] },
+  { value: 'tamanho-especial', label: 'Tamanho especial', sub: 'plus size', medidas: [['G1', '63', '80'], ['G2', '66', '82'], ['G3', '68', '88']] },
+  { value: 'infantil', label: 'Infantil', sub: '2 a 14 anos', medidas: [['2 anos', '', ''], ['4 anos', '', ''], ['6 anos', '', ''], ['8 anos', '', ''], ['10 anos', '', ''], ['12 anos', '', ''], ['14 anos', '', '']] },
+]
+
+type Item = { camiseta: string; modelo: string; tamanho: string; quantidade: number }
+
 const inputClass =
   'w-full rounded-xl border border-ink/15 bg-white px-4 py-3 text-[16px] text-ink outline-none transition focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/30'
 
 export function PedidoForm() {
+  // item em construção
   const [camiseta, setCamiseta] = useState('')
-  const [nome, setNome] = useState('')
-  const [whatsapp, setWhatsapp] = useState('')
   const [modeloVal, setModeloVal] = useState('')
   const [tamanho, setTamanho] = useState('')
   const [quantidade, setQuantidade] = useState(1)
-  const [observacao, setObservacao] = useState('')
   const [verMedidas, setVerMedidas] = useState(false)
+  // carrinho + dados do pedido
+  const [itens, setItens] = useState<Item[]>([])
+  const [nome, setNome] = useState('')
+  const [whatsapp, setWhatsapp] = useState('')
+  const [observacao, setObservacao] = useState('')
   const [status, setStatus] = useState<'idle' | 'sending' | 'ok' | 'err'>('idle')
 
   const modelo = MODELOS.find((m) => m.value === modeloVal)
   const temMedidas = modelo?.medidas.some((m) => m[1]) ?? false
+  const selecaoCompleta = !!(camiseta && modeloVal && tamanho)
+
+  const itemAtual = (): Item | null =>
+    selecaoCompleta ? { camiseta, modelo: modelo!.label, tamanho, quantidade: Math.max(1, quantidade) } : null
+
+  const limparSelecao = () => { setCamiseta(''); setModeloVal(''); setTamanho(''); setQuantidade(1); setVerMedidas(false) }
+
+  const adicionar = () => {
+    const it = itemAtual()
+    if (!it) return
+    setItens((arr) => [...arr, it])
+    limparSelecao()
+  }
+
+  const remover = (i: number) => setItens((arr) => arr.filter((_, idx) => idx !== i))
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!camiseta || !nome.trim() || !whatsapp.trim() || !modeloVal || !tamanho) return
+    const lista = [...itens]
+    const it = itemAtual()
+    if (it) lista.push(it) // inclui o item em construção, se completo
+    if (!lista.length || !nome.trim() || !whatsapp.trim()) return
     setStatus('sending')
     try {
-      const r = await fetch('/api/pedidos-camiseta', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          camiseta,
-          nome: nome.trim(),
-          whatsapp: whatsapp.trim(),
-          modelo: modelo?.label || modeloVal,
-          tamanho,
-          quantidade: Math.max(1, Number(quantidade) || 1),
-          observacao: observacao.trim() || undefined,
-        }),
-      })
-      if (!r.ok) throw new Error('fail')
+      for (const item of lista) {
+        const r = await fetch('/api/pedidos-camiseta', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            camiseta: item.camiseta,
+            modelo: item.modelo,
+            tamanho: item.tamanho,
+            quantidade: item.quantidade,
+            nome: nome.trim(),
+            whatsapp: whatsapp.trim(),
+            observacao: observacao.trim() || undefined,
+          }),
+        })
+        if (!r.ok) throw new Error('fail')
+      }
       setStatus('ok')
     } catch {
       setStatus('err')
@@ -107,9 +101,7 @@ export function PedidoForm() {
           Recebemos seu pedido. Qualquer ajuste, a gente fala com você pelo WhatsApp.
         </p>
         <button
-          onClick={() => {
-            setCamiseta(''); setNome(''); setWhatsapp(''); setModeloVal(''); setTamanho(''); setQuantidade(1); setObservacao(''); setStatus('idle')
-          }}
+          onClick={() => { limparSelecao(); setItens([]); setNome(''); setWhatsapp(''); setObservacao(''); setStatus('idle') }}
           className="mt-8 marker text-brand-accent text-[11px] hover:text-brand transition"
         >
           Fazer outro pedido ↗
@@ -136,7 +128,7 @@ export function PedidoForm() {
                 }`}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={cam.foto} alt={cam.value} className="aspect-[3/4] w-full rounded-lg object-cover bg-ink/5" />
+                <img src={cam.foto} alt={cam.value} className="aspect-[4/5] w-full rounded-lg object-cover bg-ink/5" />
                 <div className="display text-ink text-[15px] leading-tight mt-2">{cam.value}</div>
                 <div className="marker text-ink/40 text-[9px] mt-0.5">{cam.sub} · poliamida</div>
               </button>
@@ -145,33 +137,32 @@ export function PedidoForm() {
         </div>
       </div>
 
-      {/* MODELO (corte) — aparece depois de escolher a camiseta */}
+      {/* MODELO (corte) */}
       {camiseta && (
-      <div>
-        <label className="marker text-ink/55 text-[11px] block mb-3">Modelo (corte) *</label>
-        <div className="grid grid-cols-2 gap-2.5">
-          {MODELOS.map((m) => {
-            const sel = modeloVal === m.value
-            return (
-              <button
-                key={m.value}
-                type="button"
-                onClick={() => { setModeloVal(m.value); setTamanho(''); setVerMedidas(false) }}
-                className={`rounded-xl border px-4 py-3 text-left transition ${
-                  sel ? 'border-brand-accent bg-brand-accent/10 ring-2 ring-brand-accent/30' : 'border-ink/15 bg-white hover:border-ink/30'
-                }`}
-              >
-                <div className="display text-ink text-[15px] leading-tight">{m.label}</div>
-                {m.sub && <div className="marker text-ink/40 text-[9px] mt-1">{m.sub}</div>}
-              </button>
-            )
-          })}
+        <div>
+          <label className="marker text-ink/55 text-[11px] block mb-3">Modelo (corte) *</label>
+          <div className="grid grid-cols-2 gap-2.5">
+            {MODELOS.map((m) => {
+              const sel = modeloVal === m.value
+              return (
+                <button
+                  key={m.value}
+                  type="button"
+                  onClick={() => { setModeloVal(m.value); setTamanho(''); setVerMedidas(false) }}
+                  className={`rounded-xl border px-4 py-3 text-left transition ${
+                    sel ? 'border-brand-accent bg-brand-accent/10 ring-2 ring-brand-accent/30' : 'border-ink/15 bg-white hover:border-ink/30'
+                  }`}
+                >
+                  <div className="display text-ink text-[15px] leading-tight">{m.label}</div>
+                  {m.sub && <div className="marker text-ink/40 text-[9px] mt-1">{m.sub}</div>}
+                </button>
+              )
+            })}
+          </div>
         </div>
-      </div>
-
       )}
 
-      {/* TAMANHO (depende do modelo) */}
+      {/* TAMANHO */}
       {modelo && (
         <div>
           <div className="flex items-center justify-between mb-3">
@@ -182,7 +173,6 @@ export function PedidoForm() {
               </button>
             )}
           </div>
-
           {verMedidas && temMedidas && (
             <div className="mb-3 rounded-xl border border-ink/10 bg-ink/[0.03] p-3 overflow-x-auto">
               <table className="w-full text-[13px] text-ink/75">
@@ -205,20 +195,15 @@ export function PedidoForm() {
               </table>
             </div>
           )}
-
           <div className="flex flex-wrap gap-2">
             {modelo.medidas.map((m) => {
               const t = m[0]
               const sel = tamanho === t
               return (
-                <button
-                  key={t}
-                  type="button"
-                  onClick={() => setTamanho(t)}
+                <button key={t} type="button" onClick={() => setTamanho(t)}
                   className={`rounded-lg border px-4 py-2.5 text-[15px] font-medium transition ${
                     sel ? 'border-brand-accent bg-brand-accent/15 text-brand' : 'border-ink/15 bg-white text-ink/80 hover:border-ink/30'
-                  }`}
-                >
+                  }`}>
                   {t}
                 </button>
               )
@@ -228,14 +213,41 @@ export function PedidoForm() {
       )}
 
       {/* QUANTIDADE */}
-      <div>
-        <label className="marker text-ink/55 text-[11px] block mb-3">Quantidade *</label>
-        <div className="inline-flex items-center rounded-xl border border-ink/15 bg-white">
-          <button type="button" onClick={() => setQuantidade((q) => Math.max(1, q - 1))} className="size-11 text-[20px] text-ink/60 hover:text-ink transition" aria-label="Menos">−</button>
-          <span className="w-12 text-center text-[17px] font-medium tabular-nums">{quantidade}</span>
-          <button type="button" onClick={() => setQuantidade((q) => q + 1)} className="size-11 text-[20px] text-ink/60 hover:text-ink transition" aria-label="Mais">+</button>
+      {tamanho && (
+        <div>
+          <label className="marker text-ink/55 text-[11px] block mb-3">Quantidade *</label>
+          <div className="inline-flex items-center rounded-xl border border-ink/15 bg-white">
+            <button type="button" onClick={() => setQuantidade((q) => Math.max(1, q - 1))} className="size-11 text-[20px] text-ink/60 hover:text-ink transition" aria-label="Menos">−</button>
+            <span className="w-12 text-center text-[17px] font-medium tabular-nums">{quantidade}</span>
+            <button type="button" onClick={() => setQuantidade((q) => q + 1)} className="size-11 text-[20px] text-ink/60 hover:text-ink transition" aria-label="Mais">+</button>
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* ADICIONAR OUTRA CAMISETA */}
+      {selecaoCompleta && (
+        <button type="button" onClick={adicionar}
+          className="w-full rounded-xl border border-dashed border-brand-accent/60 bg-brand-accent/5 py-3 text-[14px] font-medium text-brand hover:bg-brand-accent/10 transition">
+          + Adicionar outra camiseta ao pedido
+        </button>
+      )}
+
+      {/* CARRINHO */}
+      {itens.length > 0 && (
+        <div className="rounded-xl border border-ink/10 bg-ink/[0.02] p-4">
+          <div className="marker text-ink/55 text-[10px] mb-2">No seu pedido</div>
+          <ul className="space-y-2">
+            {itens.map((it, i) => (
+              <li key={i} className="flex items-center justify-between gap-3 text-[14px]">
+                <span className="text-ink/85">
+                  <span className="font-medium">{it.quantidade}×</span> {it.camiseta} · {it.modelo} · {it.tamanho}
+                </span>
+                <button type="button" onClick={() => remover(i)} className="marker text-ink/40 hover:text-red-600 text-[10px] transition shrink-0">remover</button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {/* NOME */}
       <div>
@@ -255,16 +267,14 @@ export function PedidoForm() {
         <textarea className={`${inputClass} min-h-[80px] resize-y`} value={observacao} onChange={(e) => setObservacao(e.target.value)} placeholder="Algum detalhe?" />
       </div>
 
-      {status === 'err' && (
-        <p className="text-[14px] text-red-600">Não consegui enviar. Confere os campos e tenta de novo.</p>
-      )}
+      {status === 'err' && <p className="text-[14px] text-red-600">Não consegui enviar. Confere os campos e tenta de novo.</p>}
 
       <button
         type="submit"
-        disabled={status === 'sending' || !camiseta || !nome.trim() || !whatsapp.trim() || !modeloVal || !tamanho}
+        disabled={status === 'sending' || (itens.length === 0 && !selecaoCompleta) || !nome.trim() || !whatsapp.trim()}
         className="w-full rounded-full bg-brand py-4 text-canvas text-[15px] font-semibold transition hover:bg-brand/90 disabled:opacity-40 disabled:cursor-not-allowed"
       >
-        {status === 'sending' ? 'Enviando…' : 'Enviar pedido'}
+        {status === 'sending' ? 'Enviando…' : `Enviar pedido${itens.length + (selecaoCompleta ? 1 : 0) > 1 ? ` (${itens.length + (selecaoCompleta ? 1 : 0)} itens)` : ''}`}
       </button>
     </form>
   )
