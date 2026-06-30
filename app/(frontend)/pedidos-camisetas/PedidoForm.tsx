@@ -17,6 +17,7 @@ const MODELOS: Modelo[] = [
   { value: 'baby-look', label: 'Baby look', sub: 'feminina', medidas: [['P', '42', '56,9'], ['M', '43,5', '62,5'], ['G', '45,5', '64,5'], ['GG', '48,5', '66,5']] },
   { value: 'regata-masculina', label: 'Regata masculina', medidas: [['P', '49', '65'], ['M', '52', '70,5'], ['G', '54,5', '74,5'], ['GG', '57', '79']] },
   { value: 'regata-feminina', label: 'Regata feminina', medidas: [['P', '36,5', '59,5'], ['M', '40', '63'], ['G', '42,5', '65,5'], ['GG', '45,5', '67,5']] },
+  { value: 'regata-tradicional-feminina', label: 'Regata tradicional feminina', sub: 'feminina', medidas: [['P', '36,5', '59,5'], ['M', '40', '63'], ['G', '42,5', '65,5'], ['GG', '45,5', '67,5']] },
   { value: 'tamanho-especial', label: 'Tamanho especial', sub: 'plus size', medidas: [['G1', '63', '80'], ['G2', '66', '82'], ['G3', '68', '88']] },
   { value: 'infantil', label: 'Infantil', sub: '2 a 14 anos', medidas: [['2 anos', '', ''], ['4 anos', '', ''], ['6 anos', '', ''], ['8 anos', '', ''], ['10 anos', '', ''], ['12 anos', '', ''], ['14 anos', '', '']] },
 ]
