@@ -29,29 +29,11 @@ type PlanoCms = {
 const planosFallback: Plano[] = [
   {
     nome: 'Mensal',
-    preco: 189.9,
-    mensalEquiv: 189.9,
+    preco: 185,
+    mensalEquiv: null,
     economiaMes: 0,
     tagline: 'Pra experimentar o método.',
     recursos: ['Plano individual', 'Suporte direto', 'Atualização da planilha'],
-    destaque: false,
-  },
-  {
-    nome: 'Trimestral',
-    preco: 519.9,
-    mensalEquiv: 173.3,
-    economiaMes: 17,
-    tagline: 'Pra ver resultado de verdade.',
-    recursos: ['Tudo do mensal', 'Ciclo completo de evolução', 'Periodização estruturada'],
-    destaque: true,
-  },
-  {
-    nome: 'Semestral',
-    preco: 949.9,
-    mensalEquiv: 158.32,
-    economiaMes: 32,
-    tagline: 'Pra transformação real.',
-    recursos: ['Tudo dos anteriores', 'Preparação completa pra prova', 'Acompanhamento de ciclo longo'],
     destaque: false,
   },
 ]
@@ -68,14 +50,15 @@ export function Planos({ planosCms }: { planosCms?: PlanoCms[] }) {
               : 0,
         }))
       : planosFallback
+  const single = planos.length === 1
   return (
     <section id="planos" className="py-20 lg:py-28 bg-paper overflow-hidden">
       <div className="mx-auto max-w-[1400px] px-6 lg:px-10">
         <SectionLabel num="11" label="Planos" />
 
         <div className="grid grid-cols-12 gap-x-4 lg:gap-x-6 gap-y-4 lg:gap-y-0 items-end">
-          <h2 className="col-span-12 lg:col-span-8 display text-ink text-[clamp(34px,5vw,72px)] leading-[0.95]">
-            Escolha o plano que combina com{' '}
+          <h2 className={`col-span-12 ${single ? 'lg:col-span-9' : 'lg:col-span-8'} display text-ink text-[clamp(34px,5vw,72px)] leading-[0.95]`}>
+            {single ? 'Um plano que combina com ' : 'Escolha o plano que combina com '}
             <em
               className="italic-display text-brand-accent"
               style={{ fontStyle: 'italic' }}
@@ -83,12 +66,69 @@ export function Planos({ planosCms }: { planosCms?: PlanoCms[] }) {
               seu compromisso.
             </em>
           </h2>
-          <p className="col-span-12 lg:col-span-4 text-ink/75 text-[18px] lg:text-[20px] font-normal leading-[1.4] lg:pb-2">
-            Mesma metodologia em todos. A duração muda a profundidade do trabalho.
-          </p>
+          {!single && (
+            <p className="col-span-12 lg:col-span-4 text-ink/75 text-[18px] lg:text-[20px] font-normal leading-[1.4] lg:pb-2">
+              Mesma metodologia em todos. A duração muda a profundidade do trabalho.
+            </p>
+          )}
         </div>
 
-        {/* CARDS */}
+        {/* PLANO ÚNICO — painel horizontal (preço + o que inclui) */}
+        {single && (() => {
+          const p = planos[0]
+          const reais = Math.floor(p.preco)
+          const centavos = Math.round((p.preco - reais) * 100).toString().padStart(2, '0')
+          return (
+            <motion.div
+              initial={{ opacity: 0, y: 36 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.8, ease }}
+              className="mt-14 lg:mt-16 mx-auto max-w-[980px] grid lg:grid-cols-2 rounded-[28px] overflow-hidden border border-ink/10 shadow-[0_50px_110px_-45px_rgba(5,58,68,0.5)]"
+            >
+              {/* lado do preço */}
+              <div className="bg-ink text-canvas p-8 lg:p-12 flex flex-col">
+                <span className="marker text-brand-accent text-[11px]">01 · {p.nome}</span>
+                <div className="mt-8 flex items-end gap-1.5">
+                  <span className="marker text-[14px] mb-3 text-canvas/55">R$</span>
+                  <span className="display text-[72px] lg:text-[92px] leading-[0.8] tracking-tight tabular-nums text-canvas" style={{ fontWeight: 500 }}>{reais}</span>
+                  <span className="display text-[30px] lg:text-[38px] leading-none mb-2 tabular-nums text-canvas" style={{ fontWeight: 500 }}>,{centavos}</span>
+                </div>
+                <div className="mt-3 marker text-[11px] text-canvas/55">por mês</div>
+                <p className="mt-6 italic text-[16px] lg:text-[17px] font-normal text-canvas/60">{p.tagline}</p>
+                <div className="mt-auto pt-10">
+                  <Button
+                    href={whatsappLink(whatsappMsgPlano(p.nome, `${reais},${centavos}`))}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    variant="primary-light"
+                  >
+                    Começar agora
+                  </Button>
+                </div>
+              </div>
+              {/* lado dos recursos */}
+              <div className="bg-canvas p-8 lg:p-12 flex flex-col justify-center">
+                <span className="marker text-ink/45 text-[11px]">O que está incluído</span>
+                <ul className="mt-6 space-y-4">
+                  {p.recursos.map((r) => (
+                    <li key={r} className="flex items-start gap-3 text-[16px] lg:text-[17px] font-normal leading-[1.45] text-ink/80">
+                      <span className="shrink-0 mt-0.5 inline-flex items-center justify-center size-5 rounded-full bg-brand/10 text-brand">
+                        <svg viewBox="0 0 24 24" fill="none" className="size-3">
+                          <path d="M5 12l5 5L19 7" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      </span>
+                      <span>{r}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </motion.div>
+          )
+        })()}
+
+        {/* CARDS (quando houver 2+ planos) */}
+        {!single && (
         <div className="mt-16 lg:mt-20 grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-6 items-stretch">
           {planos.map((p, i) => {
             const isDestaque = p.destaque
@@ -265,6 +305,7 @@ export function Planos({ planosCms }: { planosCms?: PlanoCms[] }) {
             )
           })}
         </div>
+        )}
 
         <p className="mt-12 marker text-ink/50 text-[11px] text-center">
           Sem fidelidade engessada. Você fica porque está evoluindo.
